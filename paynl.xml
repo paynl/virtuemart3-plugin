@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension version="2.5" type="plugin" group="vmpayment" method="upgrade">
+  <name>Pay.nl</name>
+  <creationDate>May 2016</creationDate>
+  <author>pay.nl development team</author>
+  <authorUrl>http://www.pay.nl</authorUrl>
+  <copyright>Copyright (C) 2013-2016 Pay.nl . All rights reserved.</copyright>
+  <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+  <version>3.3.4</version>
+  <description><![CDATA[<a href="https://www.pay.nl/" target="_blank">Pay.nl</a> Easy and secure 
+  payment provider. ]]>
+  </description>
+  <files>
+    <filename plugin="paynl">paynl.php</filename>
+    <folder>language</folder>
+    <folder>paynl</folder>
+  </files>
+  <install>
+    <sql>
+      <file driver="mysql" charset="utf8">paynl/sql/install.mysql.utf8.sql</file>
+    </sql>
+  </install>
+
+  <vmconfig>
+    <fields name="params">
+      <fieldset name="basic" addfieldpath = "/plugins/vmpayment/paynl/paynl/fields" >
+        <field type="customjs" default=""/>
+        
+        <field type="vmtitle" class="paynl_title"  default="VMPAYMENT_PAYNL_PAYMENT_TITLE"
+             description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
+        <field type="spacer" default="" level="level1"/>
+        <field type="spacer" default="" level="level1"/>
+        
+        <field class="level1" type="vmtitle" default="VMPAYMENT_PAYNL_BASIC_PARAMS"/>
+        <field class="required" name="token_api" type="text" size="80" default=""
+             label="API Token"/>
+        <field class="required" name="service_id" type="text" size="80" default=""
+             label="Service ID"/>
+      
+        <field type="spacer" default="" level="level1"/>
+        <field class="required" name="payNL_optionList" type="list" 
+             label="Payment Option"/>
+        
+        <field type="text" name="payNL_optionId" class="required" />
+      
+        <!-- Order status -->
+        <!-- ============ -->
+
+        <field type="vmtitle" default="VMPAYMENT_PAYNL_ORDER_STATUS_SECTION"
+             description="VMPAYMENT_PAYNL_ORDER_STATUS_SECTION_DESC"/>
+        <field name="status_pending" type="vmorderstate" scope="com_virtuemart" default="P"
+             label="VMPAYMENT_PAYNL_STATUS_PENDING" description="VMPAYMENT_PAYNL_STATUS_PENDING_EXPLAIN"/>
+        <field name="status_success" type="vmorderstate" scope="com_virtuemart" default="C"
+             label="VMPAYMENT_PAYNL_STATUS_SUCCESS" description="VMPAYMENT_PAYNL_STATUS_SUCCESS_EXPLAIN"/>
+        <field name="status_canceled" type="vmorderstate" scope="com_virtuemart" default="X"
+             label="VMPAYMENT_PAYNL_STATUS_CANCEL" description="VMPAYMENT_PAYNL_STATUS_CANCEL_EXPLAIN"/>
+        
+        <!-- Discounts -->
+        <!-- ============ -->
+        <field type="vmtitle" default="VMPAYMENT_PAYNL_DISCOUNT_FEE_SECTION"
+             description="VMPAYMENT_PAYNL_DISCOUNT_FEE_SECTION_DESC"/>
+        <field class="warning_transaction_cost" type="vmtitle" default=""
+             description=""/>
+        <field name="cost_per_transaction" type="text" label="VMPAYMENT_PAYNL_COST_PER_TRANSACTION"
+             description="VMPAYMENT_PAYNL_COST_PER_TRANSACTION_EXPLAIN"/>
+        <field name="cost_percent_total" type="text" label="VMPAYMENT_PAYNL_COST_PERCENT_TOTAL"
+             description="VMPAYMENT_PAYNL_COST_PERCENT_TOTAL_EXPLAIN"/>
+        <field name="tax_id" type="vmtaxes" scope="com_virtuemart" label="VMPAYMENT_PAYNL_TAX"
+             description="VMPAYMENT_PAYNL_TAX_EXPLAIN"/>
+
+        
+      </fieldset>  
+    </fields>
+      
+  </vmconfig>
+    
+    
+</extension>

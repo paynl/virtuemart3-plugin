@@ -134,7 +134,7 @@ class PaynlHelperPaynl {
 		}
 		$this->total = vmPSPlugin::getAmountValueInCurrency($total, $this->_method->payment_currency);
 
-		$cd = CurrencyDisplay::getInstance($this->cart->pricesCurrency);
+//		$cd = CurrencyDisplay::getInstance($this->cart->pricesCurrency);
 	}
 
 	public function getTotal () {
@@ -348,7 +348,7 @@ class PaynlHelperPaynl {
 				// 1. check the payment_status is Completed
 				// 2. check that txn_id has not been previously processed
 				if ($this->_check_txn_id_already_processed($payments, $paynl_data['order_id'])) {
-					$this->debugLog($paypal_data['order_id'], '_order_id_already_processed', 'debug');
+					$this->debugLog($paynl_data['order_id'], '_order_id_already_processed', 'debug');
 					return FALSE;
 				}
 				$order_history['order_status'] = $this->_method->status_success;
@@ -394,7 +394,7 @@ class PaynlHelperPaynl {
           try{
             $result = $payApiInfo->doRequest();
           }catch(Exception $ex){
-              vmError($ex->message);
+              vmError($ex->getMessage());
           }
           $state = Pay_Helper::getStateText($result['paymentDetails']['state']);
           return (strcmp(strtolower($state), strtolower($paynl_data['action']))== 0);

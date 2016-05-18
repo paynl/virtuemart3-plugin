@@ -121,32 +121,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
         return TRUE;
     }
 
-
-    function plgVmDisplayLogin(VirtuemartViewUser $user, &$html, $from_cart = FALSE)
-    {
-
-        // only to display it in the cart, not in list orders view
-        if (!$from_cart) {
-            return NULL;
-        }
-
-        $vendorId = 1;
-        if (!class_exists('VirtueMartCart')) {
-            require(JPATH_VM_SITE . DS . 'helpers' . DS . 'cart.php');
-        }
-
-        $cart = VirtueMartCart::getCart();
-        if ($this->getPluginMethods($cart->vendorId) === 0) {
-            return FALSE;
-        }
-        if ($cart->pricesUnformatted['salesPrice'] <= 0.0) {
-            return FALSE;
-        }
-        if (!($this->_currentMethod = $this->getVmPluginMethod($cart->virtuemart_paymentmethod_id))) {
-            return NULL;
-        }
-    }
-
     function plgVmOnCheckoutAdvertise($cart, &$payment_advertise)
     {
 
@@ -366,8 +340,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
             ));
             $order_history['order_status'] = $this->getCustomState($api_status);
             $order_history['customer_notified'] = 0;
-            $order_history['comments'] = '';
-            $order_history['comments'] = vmText::sprintf('VMPAYMENT_PAYNL_PAYMENT_STATUS_CONFIRMED', $this->order['details']['BT']->order_number);
+            $order_history['comments'] = vmText::sprintf('VMPAYMENT_PAYNL_PAYMENT_STATUS_CONFIRMED', $order['details']['BT']->order_number);
             $orderModel->updateStatusForOneOrder($virtuemart_order_id, $order_history, TRUE);
             $this->updateTransaction($virtuemart_order_id, $api_status);
 
@@ -607,72 +580,20 @@ class plgVmPaymentPaynl extends vmPSPlugin
     function plgVmOnShowOrderBEPayment($virtuemart_order_id, $payment_method_id)
     {
 
-        if (!$this->selectedThisByMethodId($payment_method_id)) {
-            return NULL; // Another method was selected, do nothing
-        }
         if (!($this->_currentMethod = $this->getVmPluginMethod($payment_method_id))) {
             return FALSE;
         }
-        if (!($payments = $this->_getPaypalInternalData($virtuemart_order_id))) {
-            // JError::raiseWarning(500, $db->getErrorMsg());
-            return '';
-        }
 
-        $html = '<table class="adminlist" width="50%">' . "\n";
+
+        $html = '<table class="adminlist table" width="50%">' . "\n";
         $html .= $this->getHtmlHeaderBE();
-        $code = "paypal_response_";
-        $first = TRUE;
-        foreach ($payments as $payment) {
-            $html .= '<tr class="row1"><td>' . vmText::_('VMPAYMENT_PAYPAL_DATE') . '</td><td align="left">' . $payment->created_on . '</td></tr>';
-            // Now only the first entry has this data when creating the order
-            if ($first) {
-                $html .= $this->getHtmlRowBE('COM_VIRTUEMART_PAYMENT_NAME', $payment->payment_name);
-                // keep that test to have it backwards compatible. Old version was deleting that column  when receiving an IPN notification
-                if ($payment->payment_order_total and $payment->payment_order_total != 0.00) {
-                    $html .= $this->getHtmlRowBE('COM_VIRTUEMART_TOTAL', $payment->payment_order_total . " " . shopFunctions::getCurrencyByID($payment->payment_currency, 'currency_code_3'));
-                }
-
-                $first = FALSE;
-            } else {
-                $paypalInterface = $this->_loadPaynlInterface();
-
-                if (isset($payment->paypal_fullresponse) and !empty($payment->paypal_fullresponse)) {
-                    $paypal_data = json_decode($payment->paypal_fullresponse);
-                    $paypalInterface = $this->_loadPaynlInterface();
-                    $html .= $paypalInterface->onShowOrderBEPayment($paypal_data);
-
-                    $html .= '<tr><td></td><td>
-    <a href="#" class="PayPalLogOpener" rel="' . $payment->id . '" >
-        <div style="background-color: white; z-index: 100; right:0; display: none; border:solid 2px; padding:10px;" class="vm-absolute" id="PayPalLog_' . $payment->id . '">';
-
-                    foreach ($paypal_data as $key => $value) {
-                        $html .= ' <b>' . $key . '</b>:&nbsp;' . $value . '<br />';
-                    }
-
-                    $html .= ' </div>
-        <span class="icon-nofloat vmicon vmicon-16-xml"></span>&nbsp;';
-                    $html .= vmText::_('VMPAYMENT_PAYPAL_VIEW_TRANSACTION_LOG');
-                    $html .= '  </a>';
-                    $html .= ' </td></tr>';
-                } else {
-                    $html .= $paypalInterface->onShowOrderBEPaymentByFields($payment);
-                }
-            }
 
 
-        }
+        $html .= $this->getHtmlRowBE('COM_VIRTUEMART_PAYMENT_NAME', $this->_currentMethod->payment_name);
+        // keep that test to have it backwards compatible. Old version was deleting that column  when receiving an IPN notification
+
         $html .= '</table>' . "\n";
 
-        $doc = JFactory::getDocument();
-        $js = "
-	jQuery().ready(function($) {
-		$('.PayPalLogOpener').click(function() {
-			var logId = $(this).attr('rel');
-			$('#PayPalLog_'+logId).toggle();
-			return false;
-		});
-	});";
-        $doc->addScriptDeclaration($js);
         return $html;
 
     }
@@ -681,61 +602,13 @@ class plgVmPaymentPaynl extends vmPSPlugin
     /**
      * Check if the payment conditions are fulfilled for this payment method
      * @param VirtueMartCart $cart
-     * @param int $activeMethod
+     * @param stdClass $activeMethod
      * @param array $cart_prices
      * @return bool
      */
     protected function checkConditions($cart, $activeMethod, $cart_prices)
     {
-
-        //Check method publication start
-        if ($activeMethod->publishup) {
-            $nowDate = JFactory::getDate();
-            $publish_up = JFactory::getDate($activeMethod->publishup);
-            if ($publish_up->toUnix() > $nowDate->toUnix()) {
-                return FALSE;
-            }
-        }
-        if ($activeMethod->publishdown) {
-            $nowDate = JFactory::getDate();
-            $publish_down = JFactory::getDate($activeMethod->publishdown);
-            if ($publish_down->toUnix() <= $nowDate->toUnix()) {
-                return FALSE;
-            }
-        }
-        $this->convert_condition_amount($activeMethod);
-
-        $address = (($cart->ST == 0) ? $cart->BT : $cart->ST);
-
-        $amount = $this->getCartAmount($cart_prices);
-        $amount_cond = ($amount >= $activeMethod->min_amount AND $amount <= $activeMethod->max_amount
-            OR
-            ($activeMethod->min_amount <= $amount AND ($activeMethod->max_amount == 0)));
-
-        $countries = array();
-        if (!empty($activeMethod->countries)) {
-            if (!is_array($activeMethod->countries)) {
-                $countries[0] = $activeMethod->countries;
-            } else {
-                $countries = $activeMethod->countries;
-            }
-        }
-        // probably did not gave his BT:ST address
-        if (!is_array($address)) {
-            $address = array();
-            $address['virtuemart_country_id'] = 0;
-        }
-
-        if (!isset($address['virtuemart_country_id'])) {
-            $address['virtuemart_country_id'] = 0;
-        }
-        if (in_array($address['virtuemart_country_id'], $countries) || count($countries) == 0) {
-            if ($amount_cond) {
-                return TRUE;
-            }
-        }
-
-        return FALSE;
+        return $activeMethod->published == 1;
     }
 
 
@@ -974,7 +847,9 @@ class plgVmPaymentPaynl extends vmPSPlugin
     // It displays the method-specific data.
     public function plgVmOnShowOrderFEPayment($virtuemart_order_id, $virtuemart_paymentmethod_id, &$payment_name)
     {
-        $this->onShowOrderFE($virtuemart_order_id, $virtuemart_paymentmethod_id, $payment_name);
+        $paymentMethodModel = VmModel::getModel('paymentmethod');
+        $payment = $paymentMethodModel->getPayment($virtuemart_paymentmethod_id);
+        $payment_name = $payment->payment_name;
     }
 
     // This method is fired when showing when priting an Order
@@ -1029,7 +904,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
         $fields = array(
             $db->quoteName('status') . ' = ' . $db->quote($status),
-            $db->quoteName('last_update') . ' = ' . $db->quote($date->date),
+            $db->quoteName('last_update') . ' = ' . $db->quote($date),
         );
 
         $conditions = array(

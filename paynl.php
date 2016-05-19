@@ -88,39 +88,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
         return $SQLfields;
     }
 
-    /**
-     * @param $product
-     * @param $productDisplay
-     * @return bool
-     */
-    function plgVmOnProductDisplayPayment($product, &$productDisplay)
-    {
-
-        $vendorId = 1;
-        if ($this->getPluginMethods($vendorId) === 0) {
-            return FALSE;
-        }
-
-        foreach ($this->methods as $this->_currentMethod) {
-            if ($this->_currentMethod->paypalproduct == 'exp') {
-                $paypalInterface = $this->_loadPaynlInterface();
-                $product = $paypalInterface->getExpressProduct();
-                $productDisplayHtml = $this->renderByLayout('expproduct',
-                    array(
-                        'text' => vmText::_('VMPAYMENT_PAYPAL_EXPCHECKOUT_AVAILABALE'),
-                        'img' => $product['img'],
-                        'link' => $product['link'],
-                        'sandbox' => $this->_currentMethod->sandbox,
-                        'virtuemart_paymentmethod_id' => $this->_currentMethod->virtuemart_paymentmethod_id,
-                    )
-                );
-                $productDisplay[] = $productDisplayHtml;
-
-            }
-        }
-        return TRUE;
-    }
-
     function plgVmOnCheckoutAdvertise($cart, &$payment_advertise)
     {
 

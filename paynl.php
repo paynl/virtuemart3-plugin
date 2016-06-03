@@ -88,6 +88,8 @@ class plgVmPaymentPaynl extends vmPSPlugin
         return $SQLfields;
     }
 
+
+
     function plgVmOnCheckoutAdvertise($cart, &$payment_advertise)
     {
 

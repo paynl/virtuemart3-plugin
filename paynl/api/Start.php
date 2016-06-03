@@ -2,6 +2,10 @@
 /**
  * Class to use for starting a transaction
  */
+if(!class_exists('Pay_Api_Exception')){
+    require_once __DIR__.'/Exception.php';
+}
+
 class Pay_Api_Start extends Pay_Api {
 
     protected $_version = 'v3';

@@ -151,7 +151,8 @@ class plgVmPaymentPaynl extends vmPSPlugin
         $dbValues['option_id'] = $this->_currentMethod->payNL_optionList;
         $dbValues['virtuemart_order_id'] = VirtueMartModelOrders::getOrderIdByOrderNumber($dbValues['order_number']);
 
-        VmConfig::loadJLang('com_virtuemart_orders', TRUE);
+        $jLang = VmConfig::loadJLang('com_virtuemart_orders', TRUE);
+
 
         $result = $paypalInterface->ManageCheckout();
 

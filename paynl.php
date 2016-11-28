@@ -30,9 +30,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
     // instance of class
     private $customerData;
-    private $_autobilling_max_amount = '';
-    private $_user_data_valid = false;
-    private $_errormessage = array();
+
 
     function __construct(& $subject, $config)
     {
@@ -59,6 +57,8 @@ class plgVmPaymentPaynl extends vmPSPlugin
             'cost_per_transaction' => array('', 'float'),
             'cost_percent_total' => array('', 'char'),
             'tax_id' => array(0, 'int'),
+            'min_amount' => array('', 'float'),
+            'max_amount' => array('', 'float'),
         );
 
         $this->setConfigParameterable($this->_configTableFieldName, $varsToPush);
@@ -578,6 +578,16 @@ class plgVmPaymentPaynl extends vmPSPlugin
      */
     protected function checkConditions($cart, $activeMethod, $cart_prices)
     {
+        $order_amount = round($cart_prices['salesPriceShipment']+$cart_prices['salesPrice'],2);
+        $min_amount = $activeMethod->min_amount;
+        $max_amount = $activeMethod->max_amount;
+
+        if($min_amount != '' && $min_amount > $order_amount){
+            return false;
+        }
+        if($max_amount != '' && $max_amount < $order_amount){
+            return false;
+        }
         return $activeMethod->published == 1;
     }
 

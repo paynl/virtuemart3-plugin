@@ -6,7 +6,7 @@
   <authorUrl>http://www.pay.nl</authorUrl>
   <copyright>Copyright (C) 2013-2016 Pay.nl . All rights reserved.</copyright>
   <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-  <version>3.3.8</version>
+  <version>3.3.9</version>
   <description><![CDATA[<a href="https://www.pay.nl/" target="_blank">Pay.nl</a> Easy and secure 
   payment provider. ]]>
   </description>
@@ -42,7 +42,10 @@
              label="Payment Option"/>
         
         <field type="text" name="payNL_optionId" class="required" />
-      
+        <field type="spacer" default="" level="level1"/>
+        <field name="min_amount" type="text" size="80" label="Minimum order amount" />
+        <field name="max_amount" type="text" size="80" label="Maximum order amount" />
+
         <!-- Order status -->
         <!-- ============ -->
 

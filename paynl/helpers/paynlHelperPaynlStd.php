@@ -95,7 +95,9 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
             'invoiceAddress' => array(
                 'streetName' => $addressBT[0],
                 'streetNumber' => $addressBT[1],
+                'zipCode' => $this->order['details']['BT']->zip,
                 'city' => $this->order['details']['BT']->city,
+                'countryCode' => ShopFunctions::getCountryByID($this->order['details']['BT']->virtuemart_country_id, 'country_2_code')
             ),
             'address' => array(
                 'initials' => substr($this->order['details']['ST']->first_name, 0, 1),
@@ -103,7 +105,8 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
                 'streetName' => $addressST[0],
                 'streetNumber' => $addressST[1],
                 'city' => $this->order['details']['ST']->city,
-                'countryCode' => ShopFunctions::getCountryByID($address->virtuemart_country_id, 'country_2_code')
+                'zipCode' => $this->order['details']['ST']->zip,
+                'countryCode' => ShopFunctions::getCountryByID($this->order['details']['ST']->virtuemart_country_id, 'country_2_code')
             )
         );
         $paynlService->setEnduser($enduser);

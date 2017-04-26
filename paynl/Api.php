@@ -1,4 +1,7 @@
 <?php
+if (!class_exists('Pay_Api_Exception')) {
+    require(JPATH_SITE . '/plugins/vmpayment/paynl/paynl/api/Exception.php');
+}
 
 class Pay_Api {
 

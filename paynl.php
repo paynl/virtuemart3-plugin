@@ -359,7 +359,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
         if (!class_exists('VirtueMartModelOrders')) {
             require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php');
         }
-        $paynl_data = vRequest::getGet();
+        $paynl_data = vRequest::getRequest();
         if ($paynl_data['action'] == 'pending') {
             echo 'TRUE|ignoring pending';
             die;

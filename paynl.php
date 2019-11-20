@@ -57,8 +57,9 @@ class plgVmPaymentPaynl extends vmPSPlugin
             'cost_per_transaction' => array('', 'float'),
             'cost_percent_total' => array('', 'char'),
             'tax_id' => array(0, 'int'),
-            'min_amount' => array('', 'float'),
             'max_amount' => array('', 'float'),
+            'min_amount' => array('', 'float'),
+            'exchange_url' => array('', 'char'),
         );
 
         $this->setConfigParameterable($this->_configTableFieldName, $varsToPush);
@@ -356,12 +357,13 @@ class plgVmPaymentPaynl extends vmPSPlugin
     {
 
 
+
         if (!class_exists('VirtueMartModelOrders')) {
             require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php');
         }
-        $paynl_data = vRequest::getRequest();
+        $paynl_data = vRequest::getGet();
         if ($paynl_data['action'] == 'pending') {
-            echo 'TRUE|ignoring pending';
+            echo 'TRUE|ignoring pinquing';
             die;
         }
 

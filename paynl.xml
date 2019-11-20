@@ -25,32 +25,30 @@
     <fields name="params">
       <fieldset name="basic" addfieldpath = "/plugins/vmpayment/paynl/paynl/fields" >
         <field type="customjs" default=""/>
-        
-        <field type="vmtitle" class="paynl_title"  default="VMPAYMENT_PAYNL_PAYMENT_TITLE"
-             description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
+
+        <!-- logo -->
+        <field type="vmtitle" class="paynl_title" default="By:" description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
+
         <field type="spacer" default="" level="level1"/>
         <field type="spacer" default="" level="level1"/>
         
         <field class="level1" type="vmtitle" default="VMPAYMENT_PAYNL_BASIC_PARAMS"/>
-        <field class="required" name="token_api" type="text" size="80" default=""
-             label="API Token"/>
-        <field class="required" name="service_id" type="text" size="80" default=""
-             label="Service ID"/>
-      
+        <field class="required" name="token_api" type="text" size="80" default="" label="API Token" description="VMPAYMENT_PAYNL_APTOKEN_DESC"/>
+        <field class="required" name="service_id" type="text" size="80" default="" label="Service ID" description="VMPAYMENT_PAYNL_SERVICEID_DESC" />
+
         <field type="spacer" default="" level="level1"/>
-        <field class="required" name="payNL_optionList" type="list" 
-             label="Payment Option"/>
+        <field class="required" name="payNL_optionList" type="list" label="Payment Option"/>
         
         <field type="text" name="payNL_optionId" class="required" />
         <field type="spacer" default="" level="level1"/>
         <field name="min_amount" type="text" size="80" label="Minimum order amount" />
         <field name="max_amount" type="text" size="80" label="Maximum order amount" />
+        <field name="exchange_url" type="checkbox" label="VMPAYMENT_PAYNL_EXCHANGE_URL" default="0" title="test" description="VMPAYMENT_PAYNL_EXCHANGE_URL_DESC" />
 
         <!-- Order status -->
         <!-- ============ -->
 
-        <field type="vmtitle" default="VMPAYMENT_PAYNL_ORDER_STATUS_SECTION"
-             description="VMPAYMENT_PAYNL_ORDER_STATUS_SECTION_DESC"/>
+        <field type="vmtitle" default="VMPAYMENT_PAYNL_ORDER_STATUS_SECTION"  class="payheader" description=""/>
         <field name="status_pending" type="vmorderstate" scope="com_virtuemart" default="P"
              label="VMPAYMENT_PAYNL_STATUS_PENDING" description="VMPAYMENT_PAYNL_STATUS_PENDING_EXPLAIN"/>
         <field name="status_success" type="vmorderstate" scope="com_virtuemart" default="C"
@@ -60,8 +58,7 @@
         
         <!-- Discounts -->
         <!-- ============ -->
-        <field type="vmtitle" default="VMPAYMENT_PAYNL_DISCOUNT_FEE_SECTION"
-             description="VMPAYMENT_PAYNL_DISCOUNT_FEE_SECTION_DESC"/>
+        <field type="vmtitle" default="VMPAYMENT_PAYNL_DISCOUNT_FEE_SECTION" class="payheader" description=""/>
         <field class="warning_transaction_cost" type="vmtitle" default=""
              description=""/>
         <field name="cost_per_transaction" type="text" label="VMPAYMENT_PAYNL_COST_PER_TRANSACTION"

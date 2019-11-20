@@ -38,4 +38,10 @@ jQuery(document).ready(function(){
     jQuery("#params_service_id").change(function(evt,params){getPaymentProfiles();});
     jQuery("#params_token_api").change(function(evt,params){getPaymentProfiles();});
 
+    jQuery('#params_token_api-lbl').append(' <div class="infoBalloon">?</div>');
+    jQuery('#params_service_id-lbl').append(' <div class="infoBalloon">?</div>');
+
+    var translation = jQuery('#params_exchange_url-lbl').data('content');
+    jQuery('#params_exchange_url').parent().append('<span class="checkBoxLabel">'+translation+'</span>');
+
 });

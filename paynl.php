@@ -363,7 +363,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
         }
         $paynl_data = vRequest::getGet();
         if ($paynl_data['action'] == 'pending') {
-            echo 'TRUE|ignoring pinquing';
+            echo 'TRUE|ignoring pending';
             die;
         }
 

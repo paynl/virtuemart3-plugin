@@ -56,7 +56,6 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $objCur = CurrencyDisplay::getInstance($this->_method->payment_currency);
         $cur =$objCur->_vendorCurrency_code_3;
 
-
         $paynlService->setCurrency($cur);
 
         $exchangeUrl = JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&format=raw&task=pluginnotification&tmpl=component' . '&lang=' . vRequest::getCmd('lang', '');

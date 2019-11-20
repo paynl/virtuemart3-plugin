@@ -43,7 +43,7 @@
         <field type="spacer" default="" level="level1"/>
         <field name="min_amount" type="text" size="80" label="Minimum order amount" />
         <field name="max_amount" type="text" size="80" label="Maximum order amount" />
-        <field name="exchange_url" type="checkbox" label="VMPAYMENT_PAYNL_EXCHANGE_URL" default="0" title="test" description="VMPAYMENT_PAYNL_EXCHANGE_URL_DESC" />
+        <field name="exchange_url" type="checkbox" label="VMPAYMENT_PAYNL_EXCHANGE_URL" default="0" description="VMPAYMENT_PAYNL_EXCHANGE_URL_DESC" />
 
         <!-- Order status -->
         <!-- ============ -->

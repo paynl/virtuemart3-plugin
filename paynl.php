@@ -356,8 +356,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
     function plgVmOnPaymentNotification()
     {
 
-
-
         if (!class_exists('VirtueMartModelOrders')) {
             require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php');
         }
@@ -366,7 +364,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
             echo 'TRUE|ignoring pending';
             die;
         }
-
 
         $order_number = $paynl_data['extra1'];
 

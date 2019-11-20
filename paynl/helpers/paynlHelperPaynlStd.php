@@ -54,7 +54,7 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $paynlService->setDescription(vmText::_('COM_VIRTUEMART_ORDER_NUMBER') . ': ' . $this->order['details']['BT']->order_number);
 
         $objCur = CurrencyDisplay::getInstance($this->_method->payment_currency);
-        $cur =$objCur->_vendorCurrency_code_3;
+        $cur = $objCur->_vendorCurrency_code_3;
 
         $paynlService->setCurrency($cur);
 

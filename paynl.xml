@@ -27,7 +27,7 @@
         <field type="customjs" default=""/>
 
         <!-- logo -->
-        <field type="vmtitle" class="paynl_title" default="By:" description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
+        <field type="vmtitle" class="paynl_title" default="v3.4" description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
 
         <field type="spacer" default="" level="level1"/>
         <field type="spacer" default="" level="level1"/>

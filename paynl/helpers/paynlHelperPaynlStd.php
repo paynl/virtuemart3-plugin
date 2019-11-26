@@ -53,16 +53,16 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $paynlService->setAmount(round($this->total * 100));
         $paynlService->setDescription(vmText::_('COM_VIRTUEMART_ORDER_NUMBER') . ': ' . $this->order['details']['BT']->order_number);
 
-        $objCur = CurrencyDisplay::getInstance($this->_method->payment_currency);
-        $cur = $objCur->_vendorCurrency_code_3;
+        $objCurrency = CurrencyDisplay::getInstance($this->_method->payment_currency);
+        $strCurrency = $objCurrency->_vendorCurrency_code_3;
 
-        $paynlService->setCurrency($cur);
+        $paynlService->setCurrency($strCurrency);
 
         $exchangeUrl = JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&format=raw&task=pluginnotification&tmpl=component' . '&lang=' . vRequest::getCmd('lang', '');
 
         $altExchange = $this->_method->exchange_url;
         if ($altExchange === "1") {
-          $exchangeUrl .= '&action=#action#&order_id=#order_id#&extra1=#extra1#';
+          $exchangeUrl .= '&action=#action#&order_id=#order_id#&extra1=#extra1#&extra3=virtuamart';
         }
 
         $paynlService->setExchangeUrl($exchangeUrl);

@@ -62,7 +62,7 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
 
         $altExchange = $this->_method->exchange_url;
         if ($altExchange === "1") {
-          $exchangeUrl .= '&action=#action#&order_id=#order_id#&extra1=#extra1#&extra3=virtuamart';
+          $exchangeUrl .= '&action=#action#&order_id=#order_id#&extra1=#extra1#';
         }
 
         $paynlService->setExchangeUrl($exchangeUrl);
@@ -124,6 +124,8 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $paynlService->setEnduser($enduser);
         $paynlService->setExtra1($this->order['details']['BT']->order_number);
         $paynlService->setExtra2($this->context);
+        $paynlService->setObject('virtuemart 3.4');
+
         try {
             $result = $paynlService->doRequest();
         } catch (Exception $ex) {

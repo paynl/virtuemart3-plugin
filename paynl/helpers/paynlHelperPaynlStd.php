@@ -52,8 +52,20 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $paynlService->setPaymentOptionId($this->_method->payNL_optionList);
         $paynlService->setAmount(round($this->total * 100));
         $paynlService->setDescription(vmText::_('COM_VIRTUEMART_ORDER_NUMBER') . ': ' . $this->order['details']['BT']->order_number);
-        $paynlService->setCurrency(CurrencyDisplay::getInstance($this->_method->payment_currency));
-        $paynlService->setExchangeUrl(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&format=raw&task=pluginnotification&tmpl=component' . '&lang=' . vRequest::getCmd('lang', ''));
+
+        $objCurrency = CurrencyDisplay::getInstance($this->_method->payment_currency);
+        $strCurrency = $objCurrency->_vendorCurrency_code_3;
+
+        $paynlService->setCurrency($strCurrency);
+
+        $exchangeUrl = JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&format=raw&task=pluginnotification&tmpl=component' . '&lang=' . vRequest::getCmd('lang', '');
+
+        $altExchange = $this->_method->exchange_url;
+        if ($altExchange === "1") {
+          $exchangeUrl .= '&action=#action#&order_id=#order_id#&extra1=#extra1#';
+        }
+
+        $paynlService->setExchangeUrl($exchangeUrl);
         $paynlService->setFinishUrl(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived&on=' . $this->order['details']['BT']->order_number . '&pm=' . $this->order['details']['BT']->virtuemart_paymentmethod_id . '&Itemid=' . vRequest::getInt('Itemid') . '&lang =' . vRequest::getCmd('lang', ''));
 
         //add items
@@ -112,6 +124,8 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $paynlService->setEnduser($enduser);
         $paynlService->setExtra1($this->order['details']['BT']->order_number);
         $paynlService->setExtra2($this->context);
+        $paynlService->setObject('virtuemart 3.4');
+
         try {
             $result = $paynlService->doRequest();
         } catch (Exception $ex) {

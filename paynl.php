@@ -57,8 +57,9 @@ class plgVmPaymentPaynl extends vmPSPlugin
             'cost_per_transaction' => array('', 'float'),
             'cost_percent_total' => array('', 'char'),
             'tax_id' => array(0, 'int'),
-            'min_amount' => array('', 'float'),
             'max_amount' => array('', 'float'),
+            'min_amount' => array('', 'float'),
+            'exchange_url' => array('', 'char'),
         );
 
         $this->setConfigParameterable($this->_configTableFieldName, $varsToPush);
@@ -355,7 +356,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
     function plgVmOnPaymentNotification()
     {
 
-
         if (!class_exists('VirtueMartModelOrders')) {
             require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php');
         }
@@ -364,7 +364,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
             echo 'TRUE|ignoring pending';
             die;
         }
-
 
         $order_number = $paynl_data['extra1'];
 

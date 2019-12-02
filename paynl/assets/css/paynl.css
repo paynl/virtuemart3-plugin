@@ -1,13 +1,74 @@
-.paynl_title {
-    margin: 10px 0 5px 0; font-weight: bold; padding: 5px;  float:none; clear:both;
+.control-label .paynl_title {
+    margin: 10px 0 5px 0;
+    padding: 5px;
+    float: none;
+    clear: both;
     background-color: #FFFFFF !important;
-    background:url(https://www.pay.nl/images/payment_profiles/50x50/961.png) no-repeat;
-    height: 40px;
-   padding-left:100px !important;
+    background: url(https://static.pay.nl/generic/images/100x100/logo.png) no-repeat;
+    height: 100px;
+    padding-left: 100px !important;
+    background-position: right 8px;
 }
-.level1{background-color: #7c7d7f !important;}
-.level2, .level1 {margin: 10px 0 5px 0; font-weight: bold; padding: 5px;  float:none; clear:both;}
-.level2  {background-color: #cacaca;}
-.level3 {font-weight: bold;}
 
+.control-input .paynl_title {
+    padding-top: 100px;
+    margin-left: -50px;
+    display: inline-block;
+    font-size: 14px;
+}
 
+.level1 {
+    background-color: #7c7d7f !important;
+}
+
+.level2, .level1 {
+    margin: 10px 0 5px 0;
+    font-weight: bold;
+    padding: 5px;
+    float: none;
+    clear: both;
+}
+
+.level2 {
+    background-color: #cacaca;
+}
+
+.level3 {
+    font-weight: bold;
+}
+
+.control-group {
+    padding-left: 10px;
+    margin-bottom: 0;
+    margin-top: 1px;
+}
+
+.infoBalloon {
+    background-color: #2b3856;
+    color: white;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 0px 6px;
+    font-weight: bold;
+    margin-left:6px;
+}
+
+.checkBoxLabel {
+    position: relative;
+    top: 4px;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 10px;
+}
+
+.control-label .level1, .control-label .level2, .control-label .payheader {
+    background-color: #5fad64 !important;
+    color: white;
+    border-radius: 1px;
+    padding-left: 11px;
+    margin-top: 20px;
+    padding: 7px;
+    border-top-left-radius: 8px;
+    border-bottom-right-radius: 7px;
+    font-weight: bold;
+}

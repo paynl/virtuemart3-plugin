@@ -530,7 +530,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
         $return = '';
         $plugin_name = $this->_psType . '_name';
         $plugin_desc = $this->_psType . '_desc';
-
         $description = '';
 
 

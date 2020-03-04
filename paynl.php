@@ -59,6 +59,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
             'tax_id' => array(0, 'int'),
             'max_amount' => array('', 'float'),
             'min_amount' => array('', 'float'),
+            'payment_method_logos' => array('', 'char'),
             'exchange_url' => array('', 'char'),
         );
 
@@ -529,10 +530,17 @@ class plgVmPaymentPaynl extends vmPSPlugin
         $return = '';
         $plugin_name = $this->_psType . '_name';
         $plugin_desc = $this->_psType . '_desc';
+
         $description = '';
 
 
-        $pluginName = $return . '<span class="' . $this->_type . '_name">' . $activeMethod->$plugin_name . '</span>';
+        if ($activeMethod->payment_method_logos) {
+            $pluginName = $return . '<img src="https://static.pay.nl/payment_profiles/20x20/' . $activeMethod->payNL_optionId . '.png"></img>
+                                <span class="' . $this->_type . '_name">' . $activeMethod->$plugin_name . '</span>';
+        }
+        if (!$activeMethod->payment_method_logos) {
+            $pluginName = $return . '<span class="' . $this->_type . '_name">' . $activeMethod->$plugin_name . '</span>';
+        }
 
         if (!empty($activeMethod->$plugin_desc)) {
             $pluginName .= '<span class="' . $this->_type . '_description">' . $activeMethod->$plugin_desc . '</span>';

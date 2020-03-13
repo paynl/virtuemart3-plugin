@@ -6,7 +6,7 @@
   <authorUrl>http://www.pay.nl</authorUrl>
   <copyright>Copyright (C) 2013-2016 Pay.nl . All rights reserved.</copyright>
   <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-  <version>3.4</version>
+  <version>3.5</version>
   <description><![CDATA[<a href="https://www.pay.nl/" target="_blank">Pay.nl</a> Easy and secure 
   payment provider. ]]>
   </description>
@@ -27,7 +27,7 @@
         <field type="customjs" default=""/>
 
         <!-- logo -->
-        <field type="vmtitle" class="paynl_title" default="v3.4" description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
+        <field type="vmtitle" class="paynl_title" default="v3.5" description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
 
         <field type="spacer" default="" level="level1"/>
         <field type="spacer" default="" level="level1"/>
@@ -43,6 +43,7 @@
         <field type="spacer" default="" level="level1"/>
         <field name="min_amount" type="text" size="80" label="Minimum order amount" />
         <field name="max_amount" type="text" size="80" label="Maximum order amount" />
+        <field name="payment_method_logos" type="checkbox" label="VMPAYMENT_PAYNL_PAYMENT_METHOD_LOGOS" default="0" description="VMPAYMENT_PAYNL_PAYMENT_METHOD_LOGOS_DESC" />
         <field name="exchange_url" type="checkbox" label="VMPAYMENT_PAYNL_EXCHANGE_URL" default="0" description="VMPAYMENT_PAYNL_EXCHANGE_URL_DESC" />
 
         <!-- Order status -->

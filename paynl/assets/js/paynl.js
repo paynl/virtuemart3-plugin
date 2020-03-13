@@ -41,7 +41,10 @@ jQuery(document).ready(function(){
     jQuery('#params_token_api-lbl').append(' <div class="infoBalloon">?</div>');
     jQuery('#params_service_id-lbl').append(' <div class="infoBalloon">?</div>');
 
-    var translation = jQuery('#params_exchange_url-lbl').data('content');
-    jQuery('#params_exchange_url').parent().append('<span class="checkBoxLabel">'+translation+'</span>');
+    var translationExchangeURL = jQuery('#params_exchange_url-lbl').data('content');
+    var translationPaymentMethodLogos = jQuery('#params_payment_method_logos-lbl').data('content');
+
+    jQuery('#params_exchange_url').parent().append('<span class="checkBoxLabel">'+translationExchangeURL+'</span>');
+    jQuery('#params_payment_method_logos').parent().append('<span class="checkBoxLabel">'+translationPaymentMethodLogos+'</span>');
 
 });

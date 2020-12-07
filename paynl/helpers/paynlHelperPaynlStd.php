@@ -281,7 +281,7 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
     function splitAddress($strAddress)
     {
         $strAddress = trim($strAddress);
-        $a = preg_split('/([0-9]+)/', $strAddress, 2, PREG_SPLIT_DELIM_CAPTURE);
+        $a = preg_split('~^(.*)\s(\d+)\W+(\d+)$~', $strAddress, 2, PREG_SPLIT_DELIM_CAPTURE);
         $strStreetName = trim(array_shift($a));
         $strStreetNumber = trim(implode('', $a));
 

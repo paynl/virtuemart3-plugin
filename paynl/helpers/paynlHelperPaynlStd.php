@@ -281,15 +281,15 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
     function splitAddress($strAddress)
     {
         $strAddress = trim($strAddress);
-        $a = preg_split('~^(.*)\s(\d+)\W+(\d+)$~', $strAddress, 2, PREG_SPLIT_DELIM_CAPTURE);
-        $strStreetName = trim(array_shift($a));
-        $strStreetNumber = trim(implode('', $a));
 
-        if (empty($strStreetName)) { // American address notation
-            $a = preg_split('/([a-zA-Z]{2,})/', $strAddress, 2, PREG_SPLIT_DELIM_CAPTURE);
+        $a = preg_split('/(?<=\D)(?=\d)|\d+\K/', $strAddress);
 
-            $strStreetNumber = trim(implode('', $a));
-            $strStreetName = trim(array_shift($a));
+        foreach ($a as $as => $value) {
+            if (is_numeric($value)) {
+                $strStreetNumber = $value;
+            } else {
+                $strStreetName = $value;
+            }
         }
 
         return array($strStreetName, $strStreetNumber);

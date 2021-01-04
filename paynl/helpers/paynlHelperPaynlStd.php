@@ -283,12 +283,13 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $strAddress = trim($strAddress);
 
         $a = preg_split('/(?<=\D)(?=\d)|\d+\K/', $strAddress);
-
         foreach ($a as $as => $value) {
-            if (is_numeric($value)) {
-                $strStreetNumber = $value;
-            } else {
-                $strStreetName = $value;
+            if (!empty($value)) {
+                if (is_numeric($value)) {
+                    $strStreetNumber = $value;
+                } else {
+                    $strStreetName = $value;
+                }
             }
         }
 

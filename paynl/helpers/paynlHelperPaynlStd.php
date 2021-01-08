@@ -278,21 +278,32 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         return $html;
     }
 
-    function splitAddress($strAddress)
+    function splitAddress($strAddress, $country)
     {
         $strAddress = trim($strAddress);
+        $aMatch = array();
 
-        $a = preg_split('/(?<=\D)(?=\d)|\d+\K/', $strAddress);
-        foreach ($a as $as => $value) {
-            if (!empty($value)) {
-                if (is_numeric($value)) {
-                    $strStreetNumber = $value;
-                } else {
-                    $strStreetName = $value;
-                }
-            }
+        switch ($country) {
+            case "FR";
+            case "US";
+                $pattern = '#^([0-9]{1,5})([\w[:punct:]\-/]*) ([\w[:punct:] ]+)$#';
+                $matchResult = preg_match($pattern, $strAddress, $aMatch);
+
+                $strStreetNumber = (isset($aMatch[1])) ? $aMatch[1] : '';
+                $strnumberAddition = (isset($aMatch[2])) ? $aMatch[2] : '';
+                $strStreetName = (isset($aMatch[3])) ? $aMatch[3] : '';
+                break;
+            default;
+                $pattern = '#^([\w[:punct:] ]+) ([0-9]{1,5})([\w[:punct:]\-/]*)$#';
+                $matchResult = preg_match($pattern, $strAddress, $aMatch);
+
+                $strStreetName = (isset($aMatch[1])) ? $aMatch[1] : '';
+                $strStreetNumber = (isset($aMatch[2])) ? $aMatch[2] : '';
+                $strnumberAddition = (isset($aMatch[3])) ? $aMatch[3] : '';
+                break;
+
         }
 
-        return array($strStreetName, $strStreetNumber);
+        return array($strStreetName, $strStreetNumber.$strnumberAddition);
     }
 }

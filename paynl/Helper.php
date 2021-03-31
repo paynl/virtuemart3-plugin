@@ -16,8 +16,6 @@ class Pay_Helper {
                 return 'CHECKAMOUNT';
             case 100:
                 return 'PAID';
-            case -63:
-                return 'DENIED';
             default:
                 if ($stateId < 0) {
                     return 'CANCEL';

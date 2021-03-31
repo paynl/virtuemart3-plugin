@@ -251,6 +251,16 @@ class plgVmPaymentPaynl extends vmPSPlugin
         //check status from pay.nl
         $api_status = $this->checkStatus($orderId);
 
+        $payApiInfo = new Pay_Api_Info();
+        $payApiInfo->setApiToken($this->_currentMethod->token_api);
+        $payApiInfo->setServiceId($this->_currentMethod->service_id);
+        $payApiInfo->setTransactionId($orderId);
+        try {
+            $statusResult = $payApiInfo->doRequest();
+        } catch (Exception $ex) {
+            vmError($ex->getMessage());
+        }
+
         $payment_name = $this->renderPluginName($this->_currentMethod);
         $payment = end($payments);
 
@@ -284,24 +294,21 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
         vmdebug('plgVmOnPaymentResponseReceived', $payment);
 
-        if ($api_status == "CANCEL" && !$isPaid || $api_status == "DENIED" && !$isPaid) {
-            if ($api_status == "CANCEL") {
-                $order['comments'] = JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER');
-            } else {
+        if ($api_status == "CANCEL" && !$isPaid || $statusResult['paymentDetails']['state'] == "-63") {
+            if ($statusResult['paymentDetails']['state'] == "-63") {
                 $order['comments'] = vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD');
+                $order['order_status'] = $this->getCustomState('CANCEL');
+                $msg = (vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD'));
+            } else {
+                $order['comments'] = JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER');
+                $order['order_status'] = $this->getCustomState($api_status);
+                $msg = (JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER'));
             }
 
-            $order['order_status'] = $this->getCustomState($api_status);
             // VmInfo (JText::_ ('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER'));
             if ($api_status != $lastTransactionStatus) {
                 $orderModel->updateStatusForOneOrder($virtuemart_order_id, $order, false);
                 $this->updateTransaction($virtuemart_order_id, $api_status);
-            }
-
-            if ($api_status == "CANCEL") {
-                $msg = (JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER'));
-            } else {
-                $msg = (vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD'));
             }
 
             $type = 'error';
@@ -939,9 +946,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
                 $vmstate = $this->_currentMethod->status_success;
                 break;
             case 'CANCEL':
-                $vmstate = $this->_currentMethod->status_canceled;
-                break;
-            case 'DENIED':
                 $vmstate = $this->_currentMethod->status_canceled;
                 break;
             case 'PENDING':

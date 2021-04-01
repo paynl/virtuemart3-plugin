@@ -251,15 +251,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
         //check status from pay.nl
         $api_status = $this->checkStatus($orderId);
 
-        $payApiInfo = new Pay_Api_Info();
-        $payApiInfo->setApiToken($this->_currentMethod->token_api);
-        $payApiInfo->setServiceId($this->_currentMethod->service_id);
-        $payApiInfo->setTransactionId($orderId);
-        try {
-            $statusResult = $payApiInfo->doRequest();
-        } catch (Exception $ex) {
-            vmError($ex->getMessage());
-        }
+        $statusResult = $this->statusNumber($orderId);
 
         $payment_name = $this->renderPluginName($this->_currentMethod);
         $payment = end($payments);
@@ -294,8 +286,8 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
         vmdebug('plgVmOnPaymentResponseReceived', $payment);
 
-        if ($api_status == "CANCEL" && !$isPaid || $statusResult['paymentDetails']['state'] == "-63") {
-            if ($statusResult['paymentDetails']['state'] == "-63") {
+        if ($api_status == "CANCEL" && !$isPaid || $statusResult == "-63") {
+            if ($statusResult == "-63") {
                 $order['comments'] = vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD');
                 $order['order_status'] = $this->getCustomState('CANCEL');
                 $msg = (vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD'));
@@ -469,6 +461,20 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
     }
 
+    private function statusNumber($order_id)
+    {
+        $payApiInfo = new Pay_Api_Info();
+        $payApiInfo->setApiToken($this->_currentMethod->token_api);
+        $payApiInfo->setServiceId($this->_currentMethod->service_id);
+        $payApiInfo->setTransactionId($order_id);
+        try {
+            $result = $payApiInfo->doRequest();
+        } catch (Exception $ex) {
+            vmError($ex->getMessage());
+        }
+
+        return $result['paymentDetails']['state'];
+    }
 
     private function checkStatus($order_id)
     {

@@ -251,7 +251,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
         //check status from pay.nl
         $api_status = $this->checkStatus($orderId);
 
-        $statusResult = $_GET['orderStatusId'];
+        $statusResult = vRequest::getString('orderStatusId', 0);
 
         $payment_name = $this->renderPluginName($this->_currentMethod);
         $payment = end($payments);

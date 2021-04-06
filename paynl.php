@@ -232,6 +232,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
         $order_number = vRequest::getString('on', 0);
         $orderId = vRequest::getString('orderId', 0);
+        $statusResult = vRequest::getString('orderStatusId', 0);
 
         $vendorId = 0;
         if (!($this->_currentMethod = $this->getVmPluginMethod($virtuemart_paymentmethod_id))) {
@@ -250,8 +251,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
         }
         //check status from pay.nl
         $api_status = $this->checkStatus($orderId);
-
-        $statusResult = vRequest::getString('orderStatusId', 0);
 
         $payment_name = $this->renderPluginName($this->_currentMethod);
         $payment = end($payments);

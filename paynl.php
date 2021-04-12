@@ -285,7 +285,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
         vmdebug('plgVmOnPaymentResponseReceived', $payment);
 
-        if ($api_status == "CANCEL" && !$isPaid || $statusResult == "-63") {
+        if (!$isPaid && ($api_status == "CANCEL" || $statusResult == "-63")) {
             if ($statusResult == "-63") {
                 $order['comments'] = vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD');
                 $order['order_status'] = $this->getCustomState('CANCEL');

@@ -232,6 +232,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
         $order_number = vRequest::getString('on', 0);
         $orderId = vRequest::getString('orderId', 0);
+        $statusResult = vRequest::getString('orderStatusId', 0);
 
         $vendorId = 0;
         if (!($this->_currentMethod = $this->getVmPluginMethod($virtuemart_paymentmethod_id))) {
@@ -284,16 +285,23 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
         vmdebug('plgVmOnPaymentResponseReceived', $payment);
 
-        if ($api_status == "CANCEL" && !$isPaid) {
-            $order['comments'] = JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER');
-            $order['order_status'] = $this->getCustomState($api_status);
+        if (!$isPaid && ($api_status == "CANCEL" || $statusResult == "-63")) {
+            if ($statusResult == "-63") {
+                $order['comments'] = vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD');
+                $order['order_status'] = $this->getCustomState('CANCEL');
+                $msg = (vmText::_('VMPAYMENT_PAYNL_PAYMENT_DENIED_BY_PAYMENT_METHOD'));
+            } else {
+                $order['comments'] = JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER');
+                $order['order_status'] = $this->getCustomState($api_status);
+                $msg = (JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER'));
+            }
+
             // VmInfo (JText::_ ('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER'));
             if ($api_status != $lastTransactionStatus) {
                 $orderModel->updateStatusForOneOrder($virtuemart_order_id, $order, false);
                 $this->updateTransaction($virtuemart_order_id, $api_status);
             }
 
-            $msg = (JText::_('COM_VIRTUEMART_PAYMENT_CANCELLED_BY_SHOPPER'));
             $type = 'error';
             $app = JFactory::getApplication();
             $app->enqueueMessage($msg, $type);
@@ -451,7 +459,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
         return true;
 
     }
-
 
     private function checkStatus($order_id)
     {

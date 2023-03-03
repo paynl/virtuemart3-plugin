@@ -72,3 +72,7 @@
     border-bottom-right-radius: 7px;
     font-weight: bold;
 }
+
+#params_payNL_optionList_chosen{
+    display: none;
+}

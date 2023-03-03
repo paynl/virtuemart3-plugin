@@ -53,6 +53,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
             'status_expired' => array('', 'char'),
             'status_capture' => array('', 'char'),
             'status_refunded' => array('', 'char'),
+            'status_partial_refunded' => array('', 'char'),
             //discount
             'cost_per_transaction' => array('', 'float'),
             'cost_percent_total' => array('', 'char'),
@@ -277,7 +278,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
                 "currency" => $currency,
             ));
             $cart = VirtueMartCart::getCart();
-            JRequest::setVar('html', $html);
             $cart->emptyCart();
             return TRUE;
 
@@ -325,7 +325,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
             $this->updateTransaction($virtuemart_order_id, $api_status);
 
             $cart = VirtueMartCart::getCart();
-            JRequest::setVar('html', $html);
             $cart->emptyCart();
             return TRUE;
 
@@ -884,7 +883,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
             ->columns($db->quoteName($columns))
             ->values(implode(',', $values));
         $db->setQuery($query);
-        $result = $db->query();
+        $result = $db->execute();
         return $result;
     }
 
@@ -907,7 +906,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
         $query->update($db->quoteName('#__paynl_transactions'))->set($fields)->where($conditions);
 
         $db->setQuery($query);
-        $result = $db->query();
+        $result = $db->execute();
         return $result;
     }
 

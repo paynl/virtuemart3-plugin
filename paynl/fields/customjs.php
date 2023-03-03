@@ -15,7 +15,6 @@ class JFormFieldCustomjs extends JFormField
 
   protected function getInput()
   {
-    JHtml::_('behavior.colorpicker');
     vmJsApi::addJScript( '/plugins/vmpayment/paynl/paynl/assets/js/paynl.js');
     vmJsApi::css('paynl', 'plugins/vmpayment/paynl/paynl/assets/css/');
     

@@ -23,6 +23,9 @@ function getPaymentProfiles(){
                     jQuery('#params_payNL_optionList').trigger("liszt:updated");
                     alert('Error: '+data.request.errorMessage);
                 }
+
+                jQuery("#params_payNL_optionList").removeAttr('style');
+                jQuery("#params_payNL_optionList").next("div").hide();
             }
         });
     } 

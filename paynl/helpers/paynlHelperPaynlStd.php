@@ -283,12 +283,12 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $strAddress = trim($strAddress);
         $a = preg_split('/([0-9]+)/', $strAddress, 2, PREG_SPLIT_DELIM_CAPTURE);
         $strStreetName = trim(array_shift($a));
-        $strStreetNumber = trim(implode('', $a));
+        $strStreetNumber = substr(trim(implode('', $a)), 0, 45);
 
         if (empty($strStreetName)) { // American address notation
             $a = preg_split('/([a-zA-Z]{2,})/', $strAddress, 2, PREG_SPLIT_DELIM_CAPTURE);
 
-            $strStreetNumber = trim(implode('', $a));
+            $strStreetNumber = substr(trim(implode('', $a)), 0, 45);
             $strStreetName = trim(array_shift($a));
         }
 

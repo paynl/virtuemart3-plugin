@@ -124,7 +124,7 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         $paynlService->setEnduser($enduser);
         $paynlService->setExtra1($this->order['details']['BT']->order_number);
         $paynlService->setExtra2($this->context);
-        $paynlService->setObject('virtuemart 3.6.1');
+        $paynlService->setObject('virtuemart 3.6.2');
 
         try {
             $result = $paynlService->doRequest();

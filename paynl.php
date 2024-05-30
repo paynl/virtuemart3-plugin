@@ -597,7 +597,7 @@ class plgVmPaymentPaynl extends vmPSPlugin
         if (!empty($min_amount) && $min_amount > $order_amount) {
             return false;
         }
-        if (!empty($max_amount) != '' && $max_amount < $order_amount) {
+        if (!empty($max_amount) && $max_amount < $order_amount) {
             return false;
         }
         return $activeMethod->published == 1;

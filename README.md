@@ -18,6 +18,11 @@ With the PAY. plugin you can easily add different payment methods to your Virtue
 This list includes payment options like: iDEAL + QR, Bancontact + QR, Maestro, Visa, FashionCheque, Mastercard, Billink, Klarna, PayPal, Afterpay and many more. We at PAY. provide multiple payment options for your webshop. Check the full list at <a href="https://www.pay.nl/betaalmethoden">PAY's payment methods</a>.
 For more information on this topic consult PAY. at support@pay.nl.
 
+# Requirements
+    PHP tested up to 8.2
+    Joomla tested up to 4.4.4
+    Virtuemart tested up to 4.2.4
+
 # Installation
 #### Installing
 

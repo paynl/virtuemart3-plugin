@@ -8,7 +8,7 @@ class Pay_Api {
     const REQUEST_TYPE_POST = 1;
     const REQUEST_TYPE_GET = 0;
 
-    protected $_apiUrl = 'http://rest-api.pay.nl';
+    protected $_apiUrl = 'https://connect.pay.nl';
     protected $_version = 'v3';
     protected $_controller = '';
     protected $_action = '';
@@ -76,13 +76,9 @@ class Pay_Api {
             $apiUrl = $url;
 
             $ch = curl_init();
-            if ($this->_requestType == self::REQUEST_TYPE_GET) {
-                $apiUrl .= '?' . $strData;
-            } else {
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $strData);
-            }
-           
-          
+
+            $apiUrl .= '?' . $strData;
+
             curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 

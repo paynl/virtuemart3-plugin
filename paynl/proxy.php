@@ -1,7 +1,4 @@
 <?php
-/**
- * Proxy for Pay.nl API calls to avoid CORS issues
- */
 
 header('Content-Type: application/json');
 
@@ -19,7 +16,6 @@ $apiUrl = 'https://connect.pay.nl/v4/Transaction/getService/json?' . http_build_
         'serviceId' => $serviceId
     ]);
 
-// Make the request
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $apiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

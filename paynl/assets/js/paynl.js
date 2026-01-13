@@ -17,11 +17,11 @@ function getPaymentProfiles(){
                     var options = "";
                     var addedIds = {};
                     
-                    // Loop through all countries in countryOptionList
+                    // Loop through all countries
                     jQuery.each(data.countryOptionList, function(countryCode, country){
-                        // Loop through all payment options for this country
+                        // Loop payment options for this country
                         jQuery.each(country.paymentOptionList, function(optionKey, profile){
-                            // Avoid duplicates (same payment method can appear in multiple countries)
+                            // Avoid duplicate payment methods
                             if(!addedIds[profile.id]){
                                 addedIds[profile.id] = true;
                                 options += "<option value='"+profile.id+"'>"+profile.name+"</option>";

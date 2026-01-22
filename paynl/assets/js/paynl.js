@@ -6,14 +6,29 @@ function getPaymentProfiles(){
     if(serviceId != '' && apiToken != ''){
         jQuery('#params_payNL_option').html('<option>Loading...</option>');
         jQuery.ajax({
-            url: 'https://rest-api.pay.nl/v4/Transaction/getServicePaymentOptions/jsonp/?token='+apiToken+'&serviceId='+serviceId,
-            dataType: 'jsonp',
+            url: '/plugins/vmpayment/paynl/paynl/proxy.php',
+            dataType: 'json',
+            data: {
+                token: apiToken,
+                serviceId: serviceId
+            },
             success: function(data){
                 if(data.request.result == 1){                  
                     var options = "";
-                    jQuery.each(data.paymentProfiles, function(key, profile){
-                        options += "<option value='"+profile.id+"'>"+profile.name+"</option>";
+                    var addedIds = {};
+                    
+                    // Loop through all countries
+                    jQuery.each(data.countryOptionList, function(countryCode, country){
+                        // Loop payment options for this country
+                        jQuery.each(country.paymentOptionList, function(optionKey, profile){
+                            // Avoid duplicate payment methods
+                            if(!addedIds[profile.id]){
+                                addedIds[profile.id] = true;
+                                options += "<option value='"+profile.id+"'>"+profile.name+"</option>";
+                            }
+                        });
                     });
+                    
                     jQuery('#params_payNL_optionList').html(options);
                     jQuery('#params_payNL_optionList').val(optionId);
 

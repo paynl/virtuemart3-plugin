@@ -81,17 +81,31 @@ class Pay_Api {
 
             curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
 
-            $result = curl_exec($ch);
+            $arrResult = null;
+            $maxRetries = 3;
+            
+            for ($attempt = 0; $attempt < $maxRetries; $attempt++) {
+                $result = curl_exec($ch);
 
+                if ($result == false) {
+                    $error = curl_error($ch);
+                    continue;
+                }
 
-            if ($result == false) {
-                $error = curl_error($ch);
+                $arrResult = json_decode($result, true);
+
+                if ($arrResult !== null && isset($arrResult['request'])) {
+                    break;
+                }
+
+                usleep(($attempt + 1) * 100000);
             }
+            
             curl_close($ch);
-
-            $arrResult = json_decode($result, true);
-
+            
             if ($this->validateResult($arrResult)) {
                 return $this->_processResult($arrResult);
             }

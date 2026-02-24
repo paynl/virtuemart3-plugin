@@ -85,14 +85,13 @@ class Pay_Api {
 
             $result = curl_exec($ch);
 
-
             if ($result == false) {
                 $error = curl_error($ch);
             }
             curl_close($ch);
 
             $arrResult = json_decode($result, true);
-            
+
             if ($this->validateResult($arrResult)) {
                 return $this->_processResult($arrResult);
             }

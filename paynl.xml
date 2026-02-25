@@ -6,7 +6,7 @@
   <authorUrl>http://www.pay.nl</authorUrl>
   <copyright>Copyright (C) 2013-2016 Pay.nl . All rights reserved.</copyright>
   <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
   <description><![CDATA[<a href="https://www.pay.nl/" target="_blank">Pay.nl</a> Easy and secure payment provider. ]]>
   </description>
   <files>
@@ -26,7 +26,7 @@
         <field type="customjs" default=""/>
 
         <!-- logo -->
-        <field type="vmtitle" class="paynl_title" default="v4.0.0" description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
+        <field type="vmtitle" class="paynl_title" default="v4.0.1" description="VMPAYMENT_PAYNL_REGISTER_DESC"/>
 
         <field type="spacer" default="" level="level1"/>
         <field type="spacer" default="" level="level1"/>

@@ -77,13 +77,13 @@ class Pay_Api {
 
             $ch = curl_init();
 
+            $apiUrl = rtrim($apiUrl, '/');
             $apiUrl .= '?' . $strData;
 
             curl_setopt($ch, CURLOPT_URL, $apiUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             $result = curl_exec($ch);
-
 
             if ($result == false) {
                 $error = curl_error($ch);

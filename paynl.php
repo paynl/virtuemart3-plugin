@@ -216,7 +216,6 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
     function plgVmOnPaymentResponseReceived(&$html)
     {
-
         if (!class_exists('VirtueMartCart')) {
             require(JPATH_VM_SITE . DS . 'helpers' . DS . 'cart.php');
         }
@@ -250,8 +249,12 @@ class plgVmPaymentPaynl extends vmPSPlugin
         if (!($payments = $this->getDatasByOrderId($virtuemart_order_id))) {
             return '';
         }
-        //check status from pay.nl
-        $api_status = $this->checkStatus($orderId);
+
+        # Check status from Pay.
+        $api_status = $this->checkStatus($orderId, $order_number);
+        if (!$api_status) {
+            return '';
+        }
 
         $payment_name = $this->renderPluginName($this->_currentMethod);
         $payment = end($payments);
@@ -368,14 +371,18 @@ class plgVmPaymentPaynl extends vmPSPlugin
             require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php');
         }
         $paynl_data = vRequest::getRequest();
-        if ($paynl_data['action'] == 'pending') {
+        if (($paynl_data['action'] ?? '') == 'pending') {
             echo 'TRUE|ignoring pending';
             die;
         }
 
-        $order_number = $paynl_data['extra1'];
+        $order_number = $paynl_data['extra1'] ?? '';
 
-        if (!($virtuemart_order_id = VirtueMartModelOrders::getOrderIdByOrderNumber($paynl_data['extra1']))) {
+        if (empty($order_number)) {
+            return false;
+        }
+
+        if (!($virtuemart_order_id = VirtueMartModelOrders::getOrderIdByOrderNumber($order_number))) {
             return FALSE;
         }
 
@@ -391,7 +398,11 @@ class plgVmPaymentPaynl extends vmPSPlugin
         $orderModel = VmModel::getModel('orders');
         $order = $orderModel->getOrder($virtuemart_order_id);
 
-        $stateFromAPI = $this->checkStatus($paynl_data['order_id']);
+        $stateFromAPI = $this->checkStatus($paynl_data['order_id'] ?? '', $order_number);
+
+        if (!$stateFromAPI) {
+            return false;
+        }
 
         $order_history['order_status'] = $this->getCustomState($stateFromAPI);
         $order_history['customer_notified'] = 1;
@@ -459,7 +470,12 @@ class plgVmPaymentPaynl extends vmPSPlugin
 
     }
 
-    private function checkStatus($order_id)
+    /**
+     * @param $order_id
+     * @param $vmOrderId
+     * @return false|void
+     */
+    private function checkStatus($order_id, $vmOrderId)
     {
         if (!class_exists('Pay_Api_Info')) {
             require(JPATH_PLUGINS . '/vmpayment/paynl/paynl/Api.php');
@@ -473,8 +489,14 @@ class plgVmPaymentPaynl extends vmPSPlugin
         $payApiInfo->setTransactionId($order_id);
         try {
             $result = $payApiInfo->doRequest();
+
+            if ($result['statsDetails']['extra1'] != $vmOrderId) {
+                throw new Exception('Mismatch payorderid');
+            }
+
         } catch (Exception $ex) {
             vmError($ex->getMessage());
+            return false;
         }
 
         return Pay_Helper::getStateText($result['paymentDetails']['state']);

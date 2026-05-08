@@ -66,7 +66,7 @@ class PaynlHelperPaynlStd extends PaynlHelperPaynl
         }
 
         $paynlService->setExchangeUrl($exchangeUrl);
-        $paynlService->setFinishUrl(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived&on=' . $this->order['details']['BT']->order_number . '&pm=' . $this->order['details']['BT']->virtuemart_paymentmethod_id . '&Itemid=' . vRequest::getInt('Itemid') . '&lang =' . vRequest::getCmd('lang', ''));
+        $paynlService->setFinishUrl(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived&on=' . $this->order['details']['BT']->order_number . '&pm=' . $this->order['details']['BT']->virtuemart_paymentmethod_id . '&Itemid=' . vRequest::getInt('Itemid') . '&lang=' . vRequest::getCmd('lang', ''));
 
         //add items
         foreach ($this->order['items'] as $item) {
